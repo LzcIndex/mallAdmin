@@ -1,4 +1,4 @@
-# mallserve
+# mallAdmin
 
 ## Project setup
 ```
