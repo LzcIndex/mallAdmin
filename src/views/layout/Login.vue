@@ -1,57 +1,87 @@
 <template>
-  <a-form :layout="formLayout">
-    <a-form-item
-      label="Field A"
-      :label-col="formItemLayout.labelCol"
-      :wrapper-col="formItemLayout.wrapperCol"
-    >
-      <a-input placeholder="input placeholder" v-model="email"/>
-    </a-form-item>
-    <a-form-item
-      label="Field B"
-      :label-col="formItemLayout.labelCol"
-      :wrapper-col="formItemLayout.wrapperCol"
-    >
-      <a-input placeholder="input placeholder" v-model="password"/>
-    </a-form-item>
-    <a-form-item :wrapper-col="buttonItemLayout.wrapperCol">
-      <a-button type="primary"> Submit </a-button>
-    </a-form-item>
-  </a-form>
-</template>
+  <div class="login">
+      <a-form-model class="login-form"
+                ref="loginForm" :model="loginForm" :rules="rules" v-bind="layout">
+       <a-form-model-item has-feedback label="邮箱" prop="email">
+      <a-input v-model="loginForm.email" />
+    </a-form-model-item>
+    <a-form-model-item has-feedback label="密码" prop="password">
+      <a-input v-model="loginForm.password" type="password" autocomplete="off" />
+    </a-form-model-item>
 
+    <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="submitForm('loginForm')">
+        提交
+      </a-button>
+      <a-button style="margin-left: 10px" @click="resetForm('loginForm')">
+        重置
+      </a-button>
+    </a-form-model-item>
+  </a-form-model>
+  </div>
+</template>
 <script>
+import { login } from '@/api/login';
+
 export default {
   data() {
+    const emailReg = /^[\w-]+@[\w.-]+.com$/;
+    const checkEmail = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('请输入邮箱'));
+      }
+      if (emailReg.test(value)) {
+        return callback();
+      }
+      return callback(new Error('邮箱格式不正确'));
+    };
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'));
+      } else {
+        callback();
+      }
+    };
     return {
-      formLayout: 'horizontal',
-      email: '',
-      password: '',
+      loginForm: {
+        password: '',
+        email: '',
+      },
+      rules: {
+        password: [{ validator: validatePass, trigger: 'change' }],
+        email: [{ validator: checkEmail, trigger: 'change' }],
+      },
+      layout: {
+        labelCol: { span: 4 },
+        wrapperCol: { span: 14 },
+      },
     };
   },
-  computed: {
-    formItemLayout() {
-      const { formLayout } = this;
-      return formLayout === 'horizontal'
-        ? {
-          labelCol: { span: 4 },
-          wrapperCol: { span: 14 },
-        }
-        : {};
-    },
-    buttonItemLayout() {
-      const { formLayout } = this;
-      return formLayout === 'horizontal'
-        ? {
-          wrapperCol: { span: 14, offset: 4 },
-        }
-        : {};
-    },
-  },
   methods: {
-    handleFormLayoutChange(e) {
-      this.formLayout = e.target.value;
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          login(this.loginForm).then((res) => {
+            this.$store.dispatch('setUserInfo', res);
+            this.$router.push({
+              name: 'Home',
+            });
+          }).catch((error) => {
+            this.$message.error(error);
+          });
+          return true;
+        }
+        console.log('error submit!!');
+        return false;
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     },
   },
 };
 </script>
+
+<style lang="less">
+@import url('~@/assets/css/login.less');
+</style>
