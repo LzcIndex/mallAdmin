@@ -7,6 +7,8 @@ export default new Vuex.Store({
   state: {
     collapsed: false,
     userInfo: null,
+    // 存储菜单的路由
+    menuRoutes: [],
   },
   mutations: {
     setCollapsed(state) {
@@ -15,6 +17,9 @@ export default new Vuex.Store({
     setUserInfo(state, payLoad) {
       state.userInfo = payLoad;
     },
+    changeMenuRoutes(state, routes) {
+      state.menuRoutes = routes;
+    },
   },
   actions: {
     setCollapsedAction({ commit }) {
@@ -22,6 +27,9 @@ export default new Vuex.Store({
     },
     setUserInfo({ commit }, payLoad) {
       commit('setCollapsed', payLoad);
+    },
+    changeMenuRoutes({ commit }, routes) {
+      commit('changeMenuRoutes', routes);
     },
   },
   modules: {},
