@@ -44,8 +44,8 @@ export default {
     };
     return {
       loginForm: {
-        password: '',
-        email: '',
+        password: 'Lzc18475884301',
+        email: '1205218001@qq.com',
       },
       rules: {
         password: [{ validator: validatePass, trigger: 'change' }],
@@ -62,6 +62,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           login(this.loginForm).then((res) => {
+            console.log(res);
             this.$store.dispatch('setUserInfo', res);
             this.$router.push({
               name: 'Home',
