@@ -33,7 +33,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    changeCollapsed({ commit }) {
+    setCollapsedAction({ commit }) {
       commit('changeCollapsed');
     },
     setUserInfo({ commit }, userInfo) {

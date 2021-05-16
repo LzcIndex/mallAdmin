@@ -1,11 +1,11 @@
 <template>
   <div class="home-container">
     <div class="menu-list">
-      <LeftMenu />
+      <LeftMenu  :currentRoute="currentRoute"/>
     </div>
     <div class="main-app" :class="{ 'menu-unfold': $store.state.collapsed }">
       <div class="main-header">
-        <SiteBar />
+        <SiteBar :currentRoute="currentRoute"/>
       </div>
       <router-view></router-view>
     </div>
@@ -22,7 +22,15 @@ export default {
     SiteBar,
   },
   data() {
-    return {};
+    return {
+      currentRoute: this.$router.currentRoute.matched,
+    };
+  },
+  watch: {
+    $route() {
+      console.log(this.$router.currentRoute.matched);
+      this.currentRoute = this.$router.currentRoute.matched;
+    },
   },
 };
 </script>

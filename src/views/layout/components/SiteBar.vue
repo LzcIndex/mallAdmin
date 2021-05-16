@@ -10,8 +10,14 @@
       </a-button>
       <div class="breadcrumb">
         <a-breadcrumb>
-          <a-breadcrumb-item>主页</a-breadcrumb-item>
-          <a-breadcrumb-item><a href="">商品列表</a></a-breadcrumb-item>
+          <a-breadcrumb-item>
+            {{ currentRoute[0] ? currentRoute[0].meta.title : "" }}
+          </a-breadcrumb-item>
+          <a-breadcrumb-item
+            ><a href="">
+              {{ currentRoute[1] ? currentRoute[1].meta.title : "" }}
+            </a></a-breadcrumb-item
+          >
         </a-breadcrumb>
       </div>
     </div>
@@ -27,6 +33,10 @@
 
 <script>
 export default {
+  props: ['currentRoute'],
+  data() {
+    return {};
+  },
   methods: {
     toggleCollapsed() {
       this.$store.dispatch('setCollapsedAction');
@@ -36,6 +46,7 @@ export default {
       this.$router.push({ name: 'Login' });
     },
   },
+
 };
 </script>
 

@@ -40,13 +40,13 @@
       .user-info {
         text-align: center;
         cursor: pointer;
+        position: relative;
+        z-index: 999;
         li:not(:first-child) {
           display: none;
-          &:hover {
-            background-color: #eee;
-            color: #999;
-            font-weight: 700;
-          }
+          background-color: #eee;
+          color: #999;
+          font-weight: 700;
         }
         li {
           padding: 0 20px;
